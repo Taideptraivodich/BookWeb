@@ -1,0 +1,56 @@
+﻿@model BookWeb.Models.Book
+@{
+    ViewData["Title"] = "Sửa sách";
+}
+
+        <div class="max-width: 600px;">
+    <h2>Sửa sách</h2>
+
+    <form asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="ImageUrl" />
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">Tên sách</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CategoryId" class="form-label">Danh mục</label>
+            <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryId"></select>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Price" class="form-label">Giá (đ)</label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Stock" class="form-label">Tồn kho</label>
+            <input asp-for="Stock" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Ảnh bìa</label>
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" alt="ảnh bìa" style="height: 120px" class="d-block mb-2" />
+                }
+                <input type="file" name="imageFile" class="form-control" accept="image/*" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                <div class="form-text">Không chọn ảnh mới thì giữ ảnh cũ.</div>
+            </div>
+
+        <div class="mb-3">            
+            <label asp-for="Description" class="form-label">Mô tả</label>
+            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <a asp-action="Index" class="btn btn-primary">Quay lại</a>
+    </form>
+        </div>
+            
+       

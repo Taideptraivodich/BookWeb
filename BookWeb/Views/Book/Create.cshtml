@@ -1,0 +1,43 @@
+﻿@model BookWeb.Models.Book
+@{
+    ViewData["Title"] = "Thêm sách";
+}
+<div class="max-width: 600px">
+    <h2>Thêm sách mới</h2>
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">Tên sách</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Author" class="form-label">Tác giả</label>
+            <input asp-for="Author" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="CategoryId" class="form-label">Danh mục</label>
+            <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.CategoryId"></select>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Price" class="form-label">Giá (đ)</label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Ảnh bìa</label>
+            <input type="file" name="imageFile" class="form-control" accept="image/*" />
+            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Mô tả</label>
+            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </form>
+</div>
+
+       

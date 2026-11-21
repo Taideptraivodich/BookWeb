@@ -1,0 +1,27 @@
+﻿@model BookWeb.Models.Book;
+@{
+    ViewData["Title"] = "Xoá sách";
+}
+    <div class="max-width: 600px;">
+    <h2 class="text-danger">Bạn có chắc là muốn xoá cuốn sách này?</h2>
+
+    <dl class="row mt-3">
+        <dt class="col-sm-3">Tên sách</dt>
+        <dd class="col-sm-9">@Model.Title</dd>
+
+        <dt class="col-sm-3">Tác giả</dt>
+        <dd class="col-sm-9">@Model.Author</dd>
+
+        <dt class="col-sm-3">Danh mục</dt>
+        <dd class="col-sm-9">@Model.Category?.Name</dd>
+
+        <dt class="col-sm-3">Giá</dt>
+        <dd class="col-sm-9">@Model.Price.ToString("N0") đ</dd>
+    </dl>
+
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+        <button type="submit" class="btn btn-danger">Xoá</button>
+        <a asp-action="Index" class="btn btn-secondary">Huỷ</a>
+    </form>
+    </div>
+        
