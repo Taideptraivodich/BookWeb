@@ -1,0 +1,54 @@
+﻿@model BookWeb.Models.CheckoutViewModel;
+@{
+    ViewData["Title"] = "Đặt hàng";
+}
+<h2 class="mb-4">Đặt hàng</h2>
+<div class="col-md-7">
+    <h5>Thông tin giao hàng</h5>
+    <form asp-action="Checkout" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+        <div class="mb-3">
+            <label asp-for="CustomerName" class="form-label">Họ tên người nhận</label>
+            <input asp-for="CustomerName" class="form-control" />
+            <span asp-validation-for="CustomerName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Phone" class="form-label">Số điện thoại</label>
+            <input asp-for="Phone" class="form-control" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Address" class="form-label">Địa chỉ giao hàng</label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Note" class="form-label">Ghi chú (không bắt buộc)</label>
+            <input asp-for="Note" class="form-control" />
+        </div>
+        
+        <button type="submit" class="btn btn-success">Xác nhận giao hàng</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Quay lại giỏ</a>
+    </form>
+</div>
+
+<div class="col-md-5">
+    <h5>Đơn hàng của bạn</h5>
+    <ul class="list-group">
+        @foreach(var line in Model.Lines)
+        {
+            <li class="list-group-item d-flex justify-content-between">
+                <span>@line.Book.Title x  @line.Quantity</span>
+                <span>@line.SubTotal.ToString("N0") đ</span>
+            </li>
+        }
+
+        <li class="list-group-item d-flex justify-content-between fw-bold">
+            <span>Tổng cộng:</span>
+            <span class="text-danger">@Model.Total.ToString("N0") đ</span>
+        </li>
+    </ul>
+</div>
