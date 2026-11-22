@@ -34,7 +34,7 @@ namespace BookWeb.Controllers
                 return NotFound();
             }
 
-            if(order.UserId !=  CurrentUserId || !User.IsInRole("Admin"))
+            if(order.UserId !=  CurrentUserId && !User.IsInRole("Admin"))
             {
                 return Forbid();
             }

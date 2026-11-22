@@ -135,7 +135,7 @@ namespace BookWeb.Controllers
                 model.Lines = lines;
                 return View(model);
             }
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
             using var transaction = await _context.Database.BeginTransactionAsync();
             var order = new Order
             {
@@ -174,7 +174,7 @@ namespace BookWeb.Controllers
 
             SaveCart(new List<CartItem>());
             TempData["Success"] = "Đặt hàng thành công!";
-            return RedirectToAction("Details", "Order", new{id = order.Id});
+            return RedirectToAction("Details", "Orders", new{id = order.Id});
         }
 
 

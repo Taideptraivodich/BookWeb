@@ -24,7 +24,7 @@ namespace BookWeb.Models
             public string Status { get; set; } = OrderStatus.Pending;
             [Column(TypeName ="decimal(18,2)")]
             public decimal Total { get; set; }
-            public List<OrderDetail>? Details { get; set; }
+            public List<OrderDetail> Details { get; set; } = new();
         }
 
         public class OrderDetail
