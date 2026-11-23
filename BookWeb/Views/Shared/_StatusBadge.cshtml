@@ -1,0 +1,14 @@
+﻿@using BookWeb.Models
+@model string
+@{
+    var css = Model switch
+    {
+        OrderStatus.Pending => "bg-warning text-dark",
+        OrderStatus.Confirmed => "bg-info text-dark",
+        OrderStatus.Shipping => "bg-primary",
+        OrderStatus.Completed => "bg-success",
+        OrderStatus.Cancelled => "bg-secondary",
+        _ => "bg-light text-dark"
+    };
+}
+<span class="badge @css">@Model</span>
