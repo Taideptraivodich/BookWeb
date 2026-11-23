@@ -9,6 +9,16 @@ namespace BookWeb.Models
             public const string Shipping = "Đang giao ";
             public const string Completed = "Hoàn thành";
             public const string Cancelled = "Đã huỷ";
+
+            public static readonly string[] All = { Pending, Confirmed, Shipping, Completed, Cancelled };
+
+            public static string[] NextStatuses(string current) => current switch
+            {
+                Pending => new[] { Confirmed, Cancelled },
+                Confirmed => new[] { Shipping, Cancelled },
+                Shipping => new[] { Completed },
+                _ => Array.Empty<string>()
+            };
         }
 
         public class Order
