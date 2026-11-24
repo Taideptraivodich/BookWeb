@@ -1,0 +1,82 @@
+﻿@model BookWeb.Models.PagedResult<BookWeb.Models.Order>
+@*Dữ liệu orders bên controller truyền qua sẽ lấy theo kiểu của Model Order*@
+@{
+    ViewData["Title"] = "Quản lý đơn hàng";
+    @*Đổ dữ liệu status controller truyền qua thông qua viewbag vào currentStatus, lúc đầu status sẽ rỗng không có gì*@
+    var currentStatus = ViewBag.Status as string;
+}
+
+<h2 class="mb-4">Quản lý đơn hàng</h2>
+<form method="get" asp-action="Index" class="row g-2 mb-4">
+    <div class="col-md-5">
+        @*Input này gửi dữ liệu người dùng search về Index method Get ở controller
+            nhưng đồng thời cũng nhận ngược giá trị Search ghi trước đó dc controller truyền qua Viewbag
+        *@
+        <input type="text" name="search" value="@ViewBag.Search" class="form-control"
+            placeholder="Mã đơn, tên người nhận hoặc số điện thoại..." />
+    </div>
+    <div class="col-md-3">
+        @*Thẻ select tạo ra 1 ô cho phép chọn các option, cái này sẽ gửi về giá trị status*@
+        <select name="status" class="form-select">
+            <option value="">Tất cả trạng thái</option>
+            @*Lặp rồi lấy tất cả trạng thái trong thuộc tính All của bảng OrderStatus 
+                rồi tạo thành các option trong thẻ select*@
+            @foreach (var s in OrderStatus.All)
+                {
+                    @*sau khi chọn thì nó sẽ gửi giá về status cho controller, 
+                        nhưng đồng thời nó cũng nhận lại giá trị trước đó như search*@
+                    <option value="@s" selected ="@(currentStatus == s)">@s</option>
+                }
+            </select>
+    </div>
+    <div class="col-md-4">
+        @*Bấm nút submit sẽ gửi giá trị search và status về controller*@
+        <button type="submit" class="btn btn-success">Lọc</button>
+        @*Xoá lọc thì đưa người dùng về lại chính trang index đang đứng không có gì dc gửi cả*@
+        <a asp-action="Index" class="btn btn-outline-secondary">Xoá lọc</a>
+    </div>
+</form>
+@*Nếu không tồn tại 1 dữ liệu orders nào dc truyền qua từ controller 
+tức là cả 2 status và search đều không tìm thấy 1 đơn hàng nào cả thì trả ra không có đơn hàng*@
+@if(!Model.Items.Any())
+{
+    <div class="alert alert-info">Không có đơn hàng nào.</div>
+}
+@*Nếu orders từ controller truyền qua có giá trị thì render bảng danh sách tất cả order*@
+else
+{
+    <table class="table table-stripted align-middle">
+        <thead>
+            <tr>
+                <th>Mã</th>
+                <th>Ngày đặt hàng</th>
+                <th>Người nhận</th>
+                <th>Điện thoại</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var order in Model.Items)
+            {
+                <tr>
+                    <td>#@order.Id</td>
+                    <td>#@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@order.CustomerName</td>
+                    <td>@order.Phone</td>
+                    <td>@order.Total.ToString("N0") đ</td>
+                    @*Chỗ này dùng cái badge từ layout StatusBadge*@
+                    <td><partial name="_StatusBadge" model="order.Status" /></td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@order.Id"
+                            class="btn btn-sm btn-outline-success">Chi tiết</a>
+                    </td>
+                </tr>
+            };
+        </tbody>
+    </table>
+}
+<div class="mt-4">
+    <partial name="_pager" model="Model" />
+</div>

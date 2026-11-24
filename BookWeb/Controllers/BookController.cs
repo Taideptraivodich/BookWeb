@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BookWeb.Models;
-using Microsoft.Extensions.Configuration.UserSecrets;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Identity.Client;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BookWeb.Controllers
 {
@@ -21,10 +21,11 @@ namespace BookWeb.Controllers
             _env = env;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var books = await _context.Books.Include(b => b.Category).ToListAsync();
-            return View(books);
+            var books = _context.Books.Include(b => b.Category);
+            var result = await PagedResult<Book>.CreateAsync(books, page, 10);
+            return View(result);
         }
 
         public IActionResult Create()

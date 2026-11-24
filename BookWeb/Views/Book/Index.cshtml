@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BookWeb.Models.Book>
+﻿@model BookWeb.Models.PagedResult<BookWeb.Models.Book>
 @{
     ViewData["Title"] = "Danh sách sách";
 }
@@ -19,16 +19,23 @@
         </thead>
 
         <tbody>
-            @foreach (var book in Model)
+            @foreach (var book in Model.Items)
             {
                 <tr>
-                    <td>@book.Title</td>
-                    <td>
-                        @if (!string.IsNullOrEmpty(book.ImageUrl))
-                        {
-                            <img src="@book.ImageUrl" alt="@book.Title" style="height: 70px;" />
-                        }
-                    </td>
+                    
+                        <td>
+                            <a asp-controller="Home" asp-action="Details" asp-route-id="@book.Id" class="text-decoration-none text-muted">
+                            @book.Title
+                            </a>
+                        </td>
+                        <td>
+                        <a asp-controller="Home" asp-action="Details" asp-route-id="@book.Id" class="text-decoration-none">
+                            @if (!string.IsNullOrEmpty(book.ImageUrl))
+                            {
+                                <img src="@book.ImageUrl" alt="@book.Title" style="height: 70px;" />
+                            }
+                            </a>
+                        </td>                    
                     <td>@book.Author</td>
                     <td>@book.Category?.Name</td>
                     <td>@book.Price.ToString("N0") đ</td>
@@ -41,5 +48,9 @@
             }
         </tbody>
     </table>
+        </div>
+
+        <div class="mt-4">
+            <partial name="_pager" model="Model" />
         </div>
             

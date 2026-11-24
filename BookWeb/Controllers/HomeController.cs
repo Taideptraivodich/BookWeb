@@ -2,7 +2,6 @@ using BookWeb.Data;
 using BookWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client.NativeInterop;
 using System.Diagnostics;
 
 namespace BookWeb.Controllers
@@ -14,8 +13,8 @@ namespace BookWeb.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index(string? search, int? categoryId)
-        {
+        public async Task<IActionResult> Index(string? search, int? categoryId, int page = 1)
+        {            
             var query = _context.Books.Include(b => b.Category).AsQueryable();
             if(!string.IsNullOrEmpty(search))
             {
@@ -26,12 +25,14 @@ namespace BookWeb.Controllers
                 query = query.Where(b => b.CategoryId == categoryId);
             }
 
-            var books = await query.OrderByDescending(b => b.CategoryId).ToListAsync();
+            query = query.OrderByDescending(b => b.Id);
+
+            var result = await PagedResult<Book>.CreateAsync(query, page, 8);
 
             ViewBag.Categories = await _context.Categories.OrderBy(c => c.Name).ToListAsync();
             ViewBag.Search = search;
             ViewBag.CategoryId = categoryId;
-            return View(books);
+            return View(result);
         }
 
         public async Task<IActionResult> Details(int id)
